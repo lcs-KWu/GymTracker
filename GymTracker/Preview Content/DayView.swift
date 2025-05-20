@@ -12,7 +12,7 @@ struct DayView: View {
         NavigationStack {
             VStack{
               //code
-                
+                Text("code")
             }
             .navigationTitle("Workout Plans")
             .toolbar {

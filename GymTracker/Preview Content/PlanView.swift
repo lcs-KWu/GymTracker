@@ -11,7 +11,7 @@ struct PlanView: View {
     var body: some View {
         NavigationStack {
             VStack{
-              
+              Text("code")
             }
             .navigationTitle("Workout Schedule")
             .toolbar {
