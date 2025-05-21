@@ -32,7 +32,7 @@ struct DayView: View {
                 }
                 ToolbarItem(placement:.primaryAction){
                     Button{
-                        //doent do anything
+                        addWorkoutDay()
                     } label: {
                         Image(systemName: "plus")
                     }
