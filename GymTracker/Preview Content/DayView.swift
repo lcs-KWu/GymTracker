@@ -6,13 +6,21 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct DayView: View {
+    //stored properties
+    //Access model
+    @Environment(\.modelContext) var modelContext
+    @Query var workoutPlans : [WorkoutPlan]
     var body: some View {
         NavigationStack {
             VStack{
-              //code
-                Text("code")
+                List {
+                    ForEach(workoutPlans) { plan in
+                        Text(plan.title)
+                    }
+                }
             }
             .navigationTitle("Workout Plans")
             .toolbar {
@@ -35,8 +43,19 @@ struct DayView: View {
         .preferredColorScheme(.dark)
         .tint(.orange)
     }
-            
+    
+    // MARK: - Functions
+        
+        func addWorkoutDay() {
+            let newPlan = WorkoutPlan(title: "WorkoutDays", done: true)
+            modelContext.insert(newPlan)
         }
+        }
+
+
+    
+
+
 #Preview {
     DayView()
 }

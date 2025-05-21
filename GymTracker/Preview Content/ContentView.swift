@@ -6,8 +6,16 @@
 //
 
 import SwiftUI
+import SwiftData
 
 struct LandingView: View {
+    //stored properties
+    //Access model
+    @Environment(\.modelContext) var modelContext
+    
+    @Query var workoutDays : [WorkoutPlan]
+    
+    //computed properties
     var body: some View {
         TabView(selection: Binding.constant(2)) {
             
