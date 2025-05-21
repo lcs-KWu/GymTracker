@@ -32,6 +32,8 @@ struct DayView: View {
                 
             }
         }
+        .preferredColorScheme(.dark)
+        .tint(.orange)
     }
             
         }

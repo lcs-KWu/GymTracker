@@ -12,6 +12,7 @@ struct GymTrackerApp: App {
     var body: some Scene {
         WindowGroup {
             LandingView()
+                .modelContainer(for: WorkoutPlan.self)
         }
     }
 }
