@@ -47,7 +47,7 @@ struct DayView: View {
     // MARK: - Functions
         
         func addWorkoutDay() {
-            let newPlan = WorkoutPlan(title: "WorkoutDays", done: true)
+            let newPlan = WorkoutPlan(title: "WorkoutDays", )
             modelContext.insert(newPlan)
         }
         }

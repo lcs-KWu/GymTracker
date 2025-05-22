@@ -10,11 +10,10 @@ import SwiftData
  @Model
 class WorkoutPlan: Identifiable {
     var title: String
-    var done: Bool
-
-    init(title: String, done: Bool) {
+    
+    init(title: String) {
         self.title = title
-        self.done = done
+        
     }
 }
 
