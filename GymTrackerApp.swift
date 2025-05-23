@@ -8,11 +8,12 @@
 import SwiftUI
 
 @main
-struct GymTrackerApp: App {
+struct YourApp: App {
     var body: some Scene {
         WindowGroup {
-            LandingView()
-                .modelContainer(for: WorkoutPlan.self)
+            DayView()
         }
+        .modelContainer(for: [WorkoutPlan.self, WorkoutExercise.self])
     }
 }
+

@@ -4,33 +4,47 @@
 //
 //  Created by Yixuan Wu on 2025-05-21.
 //
-import SwiftUI
+// ViewModel.swift
+// GymTracker
+
+import Foundation
 import SwiftData
 
-class WorkoutPlanViewModel: ObservableObject {
-    @Published var plans: [WorkoutPlan] = []
-
-    let modelContext: ModelContext
-
+@Observable
+class WorkoutViewModel {
+    private var context: ModelContext
+    var workoutPlans: [WorkoutPlan] = []
+    
     init(context: ModelContext) {
-        self.modelContext = context
-        fetchPlans()
+        self.context = context
+        Task {
+            await fetchPlans()
+        }
     }
 
-    func fetchPlans() {
-        // 拉取plans的逻辑（可以考虑Query替代） 
+    @MainActor
+    func fetchPlans() async {
+        do {
+            workoutPlans = try context.fetch(FetchDescriptor<WorkoutPlan>())
+        } catch {
+            print("Error fetching plans: \(error)")
+        }
     }
 
     func addPlan(title: String) {
         let newPlan = WorkoutPlan(title: title)
-        modelContext.insert(newPlan)
-        fetchPlans()
+        context.insert(newPlan)
+        workoutPlans.append(newPlan)
     }
 
-    func deletePlan(at offsets: IndexSet) {
-        for index in offsets {
-            modelContext.delete(plans[index])
+    func deletePlan(_ plan: WorkoutPlan) {
+        context.delete(plan)
+        workoutPlans.removeAll { $0.id == plan.id }
+    }
+
+    func addExercise(to plan: WorkoutPlan, exercise: WorkoutExercise) {
+        if let index = workoutPlans.firstIndex(where: { $0.id == plan.id }) {
+            workoutPlans[index].exercises.append(exercise)
         }
-        fetchPlans()
     }
 }

@@ -10,47 +10,36 @@ import SwiftData
 
 struct DayView: View {
     //stored properties
-    //Access model
-    @Environment(\.modelContext) var modelContext
-    @Query var workoutPlans : [WorkoutPlan]
+    @Environment(\.modelContext) private var context
+    @State private var viewModel: WorkoutViewModel!
+
     var body: some View {
         NavigationStack {
-            VStack{
-                List {
-                    ForEach(workoutPlans) { plan in
-                        Text(plan.title)
+            VStack {
+                if viewModel != nil {
+                    List {
+                        ForEach(viewModel.workoutPlans, id: \.id) { plan in
+                            Text(plan.title)
+                        }
+                    }
+
+                    Button("Add") {
+                        viewModel.addPlan(title: "New Workout Plan")
                     }
                 }
             }
-            .navigationTitle("Workout Plans")
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading){
-                    Button("Edit") {
-                        //does not do anything
-                        
-                    }
+            .onAppear {
+                if viewModel == nil {
+                    viewModel = WorkoutViewModel(context: context)
                 }
-                ToolbarItem(placement:.primaryAction){
-                    Button{
-                        addWorkoutDay()
-                    } label: {
-                        Image(systemName: "plus")
-                    }
+                Task {
+                    await viewModel.fetchPlans()
                 }
-                
             }
         }
-        .preferredColorScheme(.dark)
-        .tint(.orange)
     }
-    
-    // MARK: - Functions
-        
-        func addWorkoutDay() {
-            let newPlan = WorkoutPlan(title: "WorkoutDays", )
-            modelContext.insert(newPlan)
-        }
-        }
+}
+
 
 
     

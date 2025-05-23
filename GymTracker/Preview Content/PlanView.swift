@@ -8,34 +8,49 @@
 import SwiftUI
 import SwiftData
 
-struct PlanView: View {
+import SwiftUI
+
+struct ExerciseListView: View {
+    let plan: WorkoutPlan
+    @State private var newExerciseName = ""
+    @State private var reps = ""
+    @State private var sets = ""
+
     var body: some View {
-        NavigationStack {
-            VStack{
-              Text("code")
+        VStack {
+            List {
+                ForEach(plan.exercises, id: \.id) { exercise in
+                    VStack(alignment: .leading) {
+                        Text(exercise.name)
+                        Text("Reps: \(exercise.reps) | Sets: \(exercise.sets)")
+                            .font(.caption)
+                            .foregroundColor(.secondary)
+                    }
+                }
             }
-            .navigationTitle("Workout Schedule")
-            .toolbar {
-                ToolbarItem(placement: .topBarLeading){
-                    Button("Edit") {
-                        //does not do anything
-                        
-                    }
-                }
-                ToolbarItem(placement:.primaryAction){
-                    Button{
-                        //doent do anything
-                    } label: {
-                        Image(systemName: "plus")
-                    }
-                }
+
+            VStack {
+                TextField("Exercise name", text: $newExerciseName)
+                TextField("Reps", text: $reps)
+                    .keyboardType(.numberPad)
+                TextField("Sets", text: $sets)
+                    .keyboardType(.numberPad)
                 
+                Button("Add Exercise") {
+                    guard let r = Int(reps), let s = Int(sets) else { return }
+                    let newExercise = WorkoutExercise(name: newExerciseName, reps: r, sets: s)
+                    plan.exercises.append(newExercise)
+                    newExerciseName = ""
+                    reps = ""
+                    sets = ""
+                }
             }
+            .padding()
         }
+        .navigationTitle(plan.title)
     }
-            
-        }
+}
 
 #Preview {
-    PlanView()
+    ExerciseListView()
 }
