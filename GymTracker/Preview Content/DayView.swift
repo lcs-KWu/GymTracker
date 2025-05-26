@@ -16,7 +16,7 @@ struct DayView: View {
     
     @State private var newTitle: String = ""
 
-    // MARK: Body
+    // MARK: computed properties 
     var body: some View {
         NavigationStack {
             VStack {
@@ -31,7 +31,7 @@ struct DayView: View {
                 }
                 .listStyle(.plain)
                 
-                // New plan
+                //add new plan
                 HStack {
                     TextField("New Plan Title", text: $newTitle)
                         .textFieldStyle(.roundedBorder)
@@ -51,6 +51,19 @@ struct DayView: View {
         .tint(.orange)
     }
 
+    // MARK: Functions
+    
+    func addWorkoutPlan() {
+        let newPlan = WorkoutPlan(title: newTitle)
+        modelContext.insert(newPlan)
+        newTitle = ""
+    }
+    
+    func deletePlan(at offsets: IndexSet) {
+        for index in offsets {
+            modelContext.delete(workoutPlans[index])
+        }
+    }
 }
 
 #Preview {
