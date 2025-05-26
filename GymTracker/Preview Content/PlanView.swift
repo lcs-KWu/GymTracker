@@ -8,46 +8,119 @@
 import SwiftUI
 import SwiftData
 
-import SwiftUI
-
 struct ExerciseListView: View {
-    let plan: WorkoutPlan
+
+    // MARK: Stored Properties
+    @Environment(\.modelContext) private var context
+    @Bindable var plan: WorkoutPlan
+    
     @State private var newExerciseName = ""
-    @State private var reps = ""
-    @State private var sets = ""
+    @State private var newExerciseReps = ""
+    @State private var newExerciseSets = ""
 
+    // MARK: View
     var body: some View {
-        VStack {
-            List {
-                ForEach(plan.exercises, id: \.id) { exercise in
-                    VStack(alignment: .leading) {
-                        Text(exercise.name)
-                        Text("Reps: \(exercise.reps) | Sets: \(exercise.sets)")
-                            .font(.caption)
-                            .foregroundColor(.secondary)
-                    }
-                }
-            }
+        VStack(spacing: 0) {
 
-            VStack {
-                TextField("Exercise name", text: $newExerciseName)
-                TextField("Reps", text: $reps)
-                    .keyboardType(.numberPad)
-                TextField("Sets", text: $sets)
-                    .keyboardType(.numberPad)
-                
-                Button("Add Exercise") {
-                    guard let r = Int(reps), let s = Int(sets) else { return }
-                    let newExercise = WorkoutExercise(name: newExerciseName, reps: r, sets: s)
-                    plan.exercises.append(newExercise)
-                    newExerciseName = ""
-                    reps = ""
-                    sets = ""
+            // Top bar
+            HStack {
+                Text("Exercises")
+                    .font(.headline)
+                    .foregroundColor(.white)
+                Spacer()
+                Button {
+                    addExercise()
+                } label: {
+                    Image(systemName: "plus.circle")
+                        .foregroundColor(.cyan)
+                        .font(.title2)
                 }
             }
             .padding()
+            .background(Color.black)
+
+            // Exercise list
+            List {
+                ForEach(plan.exercises) { exercise in
+                    HStack {
+                        Text("\(exercise.name) - \(exercise.sets)x\(exercise.reps)")
+                            .padding()
+                            .background(Color.cyan)
+                            .foregroundColor(.black)
+                            .cornerRadius(8)
+                        Spacer()
+                        Button {
+                            deleteExercise(exercise)
+                        } label: {
+                            Image(systemName: "xmark.circle.fill")
+                                .foregroundColor(.red)
+                        }
+                    }
+                    .listRowBackground(Color.clear)
+                }
+            }
+            .listStyle(.plain)
+            .background(Color.black)
+
+            // Input section
+            VStack(spacing: 12) {
+                TextField("Exercise Name", text: $newExerciseName)
+                    .textFieldStyle(.roundedBorder)
+                TextField("Reps", text: $newExerciseReps)
+                    .textFieldStyle(.roundedBorder)
+                    .keyboardType(.numberPad)
+                TextField("Sets", text: $newExerciseSets)
+                    .textFieldStyle(.roundedBorder)
+                    .keyboardType(.numberPad)
+                
+                Button("Add Exercise") {
+                    addExercise()
+                }
+                .padding()
+                .frame(maxWidth: .infinity)
+                .background(Color.red)
+                .foregroundColor(.white)
+                .cornerRadius(8)
+            }
+            .padding()
+            
+            // Bottom nav bar
+            HStack {
+                Spacer()
+                Image(systemName: "house.fill")
+                Spacer()
+                Image(systemName: "clock.fill")
+                Spacer()
+                Image(systemName: "arrow.left.and.right.circle.fill")
+                Spacer()
+            }
+            .padding()
+            .background(Color.white)
         }
+        .background(Color.black.edgesIgnoringSafeArea(.all))
         .navigationTitle(plan.title)
     }
-}
 
+    // MARK: Functions
+
+    func addExercise() {
+        guard let reps = Int(newExerciseReps),
+              let sets = Int(newExerciseSets),
+              !newExerciseName.isEmpty else { return }
+
+        let exercise = WorkoutExercise(name: newExerciseName, reps: reps, sets: sets)
+        plan.exercises.append(exercise)
+        context.insert(exercise)
+
+        newExerciseName = ""
+        newExerciseReps = ""
+        newExerciseSets = ""
+    }
+
+    func deleteExercise(_ exercise: WorkoutExercise) {
+        if let index = plan.exercises.firstIndex(of: exercise) {
+            plan.exercises.remove(at: index)
+            context.delete(exercise)
+        }
+    }
+}

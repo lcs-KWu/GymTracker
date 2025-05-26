@@ -8,9 +8,6 @@
 
 /* Begin PBXBuildFile section */
 		98100A372DDE8588004D4DBB /* Exercises Model.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98100A362DDE8588004D4DBB /* Exercises Model.swift */; };
-		98100A392DDE97CA004D4DBB /* PlanViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98100A382DDE97CA004D4DBB /* PlanViewModel.swift */; };
-		9843558C2DE4EF4D00006362 /* SupaBase.swift in Sources */ = {isa = PBXBuildFile; fileRef = 9843558B2DE4EF4A00006362 /* SupaBase.swift */; };
-		988D366A2DE0B63300472A1B /* ExerciseViewModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = 988D36692DE0B63300472A1B /* ExerciseViewModel.swift */; };
 		98C2C1C72DDCD571002E4866 /* GymTrackerApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 98C2C1C62DDCD571002E4866 /* GymTrackerApp.swift */; };
 		98C2C1C92DDCD571002E4866 /* Preview Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 98C2C1C22DDCD571002E4866 /* Preview Assets.xcassets */; };
 		98C2C1CA2DDCD571002E4866 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 98C2C1C42DDCD571002E4866 /* Assets.xcassets */; };
@@ -19,10 +16,7 @@
 
 /* Begin PBXFileReference section */
 		98100A362DDE8588004D4DBB /* Exercises Model.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Exercises Model.swift"; sourceTree = "<group>"; };
-		98100A382DDE97CA004D4DBB /* PlanViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlanViewModel.swift; sourceTree = "<group>"; };
-		9843558B2DE4EF4A00006362 /* SupaBase.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SupaBase.swift; sourceTree = "<group>"; };
 		985AA8732DD17D2200059C95 /* GymTracker.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GymTracker.app; sourceTree = BUILT_PRODUCTS_DIR; };
-		988D36692DE0B63300472A1B /* ExerciseViewModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ExerciseViewModel.swift; sourceTree = "<group>"; };
 		98C2C1C22DDCD571002E4866 /* Preview Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = "Preview Assets.xcassets"; sourceTree = "<group>"; };
 		98C2C1C42DDCD571002E4866 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		98C2C1C62DDCD571002E4866 /* GymTrackerApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GymTrackerApp.swift; sourceTree = "<group>"; };
@@ -73,9 +67,6 @@
 			children = (
 				98C2C1DB2DDCE22C002E4866 /* Workout Plan Model.swift */,
 				98100A362DDE8588004D4DBB /* Exercises Model.swift */,
-				98100A382DDE97CA004D4DBB /* PlanViewModel.swift */,
-				988D36692DE0B63300472A1B /* ExerciseViewModel.swift */,
-				9843558B2DE4EF4A00006362 /* SupaBase.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -130,7 +121,6 @@
 			mainGroup = 985AA86A2DD17D2200059C95;
 			minimizedProjectReferenceProxies = 1;
 			packageReferences = (
-				9843558D2DE4EFF900006362 /* XCRemoteSwiftPackageReference "supabase-swift" */,
 			);
 			preferredProjectObjectVersion = 77;
 			productRefGroup = 985AA8742DD17D2200059C95 /* Products */;
@@ -160,11 +150,8 @@
 			buildActionMask = 2147483647;
 			files = (
 				98C2C1C72DDCD571002E4866 /* GymTrackerApp.swift in Sources */,
-				988D366A2DE0B63300472A1B /* ExerciseViewModel.swift in Sources */,
 				98C2C1DC2DDCE22C002E4866 /* Workout Plan Model.swift in Sources */,
-				98100A392DDE97CA004D4DBB /* PlanViewModel.swift in Sources */,
 				98100A372DDE8588004D4DBB /* Exercises Model.swift in Sources */,
-				9843558C2DE4EF4D00006362 /* SupaBase.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -372,17 +359,6 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
-
-/* Begin XCRemoteSwiftPackageReference section */
-		9843558D2DE4EFF900006362 /* XCRemoteSwiftPackageReference "supabase-swift" */ = {
-			isa = XCRemoteSwiftPackageReference;
-			repositoryURL = "https://github.com/supabase-community/supabase-swift";
-			requirement = {
-				kind = upToNextMajorVersion;
-				minimumVersion = 2.5.1;
-			};
-		};
-/* End XCRemoteSwiftPackageReference section */
 	};
 	rootObject = 985AA86B2DD17D2200059C95 /* Project object */;
 }
