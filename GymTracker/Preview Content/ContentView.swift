@@ -10,7 +10,7 @@ import SwiftUI
 import SwiftData
 
 struct LandingView: View {
-// MARK: Stored Properties
+    // MARK: Stored Properties
     @Environment(\.modelContext) var modelContext
     @Query var workoutPlans: [WorkoutPlan]
     
@@ -26,16 +26,9 @@ struct LandingView: View {
                 }
                 .tag(1)
             
-            // add plans
-            AddingView()
-                .tabItem {
-                    Image(systemName: "plus.circle.fill")
-                    Text("Add Plan")
-                }
-                .tag(2)
+                .preferredColorScheme(.dark)
+                .tint(.orange)
         }
-        .preferredColorScheme(.dark)
-        .tint(.orange)
     }
 }
 
