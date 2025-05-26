@@ -1,5 +1,5 @@
 //
-//  PlanView.swift
+//  DayView.swift
 //  GymTracker
 //
 //  Created by Yixuan Wu on 2025-05-20.
@@ -8,135 +8,66 @@
 import SwiftUI
 import SwiftData
 
-struct ExerciseListView: View {
+struct DayView: View {
 
     // MARK: Stored Properties
-    @Environment(\.modelContext) private var context
-    @Bindable var plan: WorkoutPlan
+    @Environment(\.modelContext) var modelContext
+    @Query var workoutPlans: [WorkoutPlan]
     
-    @State private var newExerciseName = ""
-    @State private var newExerciseReps = ""
-    @State private var newExerciseSets = ""
+    @State private var newTitle: String = ""
 
-    // MARK: Computed proerties 
+    // MARK: computed properties 
     var body: some View {
-        VStack(spacing: 0) {
-
-            // Top bar
-            HStack {
-                Text("Exercises")
-                    .font(.headline)
-                    .foregroundColor(.white)
-                Spacer()
-                Button {
-                    addExercise()
-                } label: {
-                    Image(systemName: "plus.circle")
-                        .foregroundColor(.cyan)
-                        .font(.title2)
-                }
-            }
-            .padding()
-            .background(Color.black)
-
-            // Exercise list
-            List {
-                ForEach(plan.exercises) { exercise in
-                    HStack {
-                        Text("\(exercise.name) - \(exercise.sets)x\(exercise.reps)")
-                            .padding()
-                            .background(Color.cyan)
-                            .foregroundColor(.black)
-                            .cornerRadius(8)
-                        Spacer()
-                        Button {
-                            deleteExercise(exercise)
-                        } label: {
-                            Image(systemName: "xmark.circle.fill")
-                                .foregroundColor(.red)
+        NavigationStack {
+            VStack {
+                List {
+                    ForEach(workoutPlans) { plan in
+                        NavigationLink(destination: ExerciseListView(plan: plan)) {
+                            Text(plan.title)
+                                .foregroundColor(.white)
                         }
                     }
-                    .listRowBackground(Color.clear)
+                    .onDelete(perform: deletePlan)
                 }
-            }
-            .listStyle(.plain)
-            .background(Color.black)
-
-            // Input section
-            VStack(spacing: 12) {
-                TextField("Exercise Name", text: $newExerciseName)
-                    .textFieldStyle(.roundedBorder)
-                TextField("Reps", text: $newExerciseReps)
-                    .textFieldStyle(.roundedBorder)
-                    .keyboardType(.numberPad)
-                TextField("Sets", text: $newExerciseSets)
-                    .textFieldStyle(.roundedBorder)
-                    .keyboardType(.numberPad)
+                .listStyle(.plain)
                 
-                Button("Add Exercise") {
-                    addExercise()
+                //add new plan
+                HStack {
+                    TextField("New Plan Title", text: $newTitle)
+                        .textFieldStyle(.roundedBorder)
+                    
+                    Button {
+                        addWorkoutPlan()
+                    } label: {
+                        Image(systemName: "plus")
+                    }
+                    .disabled(newTitle.isEmpty)
                 }
                 .padding()
-                .frame(maxWidth: .infinity)
-                .background(Color.red)
-                .foregroundColor(.white)
-                .cornerRadius(8)
             }
-            .padding()
-            
-            // Bottom nav bar
-            HStack {
-                Spacer()
-                Image(systemName: "house.fill")
-                Spacer()
-                Image(systemName: "clock.fill")
-                Spacer()
-                Image(systemName: "arrow.left.and.right.circle.fill")
-                Spacer()
-            }
-            .padding()
-            .background(Color.white)
+            .navigationTitle("Workout Plans")
         }
-        .background(Color.black.edgesIgnoringSafeArea(.all))
-        .navigationTitle(plan.title)
+        .preferredColorScheme(.dark)
+        .tint(.orange)
     }
 
     // MARK: Functions
-
-    func addExercise() {
-        guard let reps = Int(newExerciseReps),
-              let sets = Int(newExerciseSets),
-              !newExerciseName.isEmpty else { return }
-
-        let exercise = WorkoutExercise(name: newExerciseName, reps: reps, sets: sets)
-        plan.exercises.append(exercise)
-        context.insert(exercise)
-
-        newExerciseName = ""
-        newExerciseReps = ""
-        newExerciseSets = ""
+    
+    func addWorkoutPlan() {
+        let newPlan = WorkoutPlan(title: newTitle)
+        modelContext.insert(newPlan)
+        newTitle = ""
     }
-
-    func deleteExercise(_ exercise: WorkoutExercise) {
-        if let index = plan.exercises.firstIndex(of: exercise) {
-            plan.exercises.remove(at: index)
-            context.delete(exercise)
+    
+    func deletePlan(at offsets: IndexSet) {
+        for index in offsets {
+            modelContext.delete(workoutPlans[index])
         }
     }
 }
 
-
 #Preview {
-    let container = try! ModelContainer(for: WorkoutPlan.self, WorkoutExercise.self)
-    let context = container.mainContext
-
-    let samplePlan = WorkoutPlan(title: "Leg Day")
-    samplePlan.exercises.append(WorkoutExercise(name: "Squat", reps: 10, sets: 4))
-    samplePlan.exercises.append(WorkoutExercise(name: "Lunges", reps: 12, sets: 3))
-    context.insert(samplePlan)
-
-    return NavigationStack {
-        ExerciseListView(plan: samplePlan)
-    }
-    .modelContainer(container)
+    DayView()
+        .modelContainer(for: [WorkoutPlan.self, WorkoutExercise.self])
 }
+
