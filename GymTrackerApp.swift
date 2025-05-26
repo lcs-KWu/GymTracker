@@ -6,14 +6,15 @@
 //
 
 import SwiftUI
+import SwiftData
 
 @main
-struct YourApp: App {
+struct MyFitnessApp: App {
     var body: some Scene {
         WindowGroup {
             DayView()
         }
+        // Inject the SwiftData model into the environment
         .modelContainer(for: [WorkoutPlan.self, WorkoutExercise.self])
     }
 }
-
