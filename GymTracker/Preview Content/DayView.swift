@@ -9,42 +9,52 @@ import SwiftUI
 import SwiftData
 
 struct DayView: View {
-    //stored properties
-    @Environment(\.modelContext) private var context
-    @State private var viewModel: WorkoutViewModel!
 
+    // MARK: Stored Properties
+    @Environment(\.modelContext) var modelContext
+    @Query var workoutPlans: [WorkoutPlan]
+    
+    @State private var newTitle: String = ""
+
+    // MARK: Body
     var body: some View {
         NavigationStack {
             VStack {
-                if viewModel != nil {
-                    List {
-                        ForEach(viewModel.workoutPlans, id: \.id) { plan in
+                List {
+                    ForEach(workoutPlans) { plan in
+                        NavigationLink(destination: ExerciseListView(plan: plan)) {
                             Text(plan.title)
+                                .foregroundColor(.white)
                         }
                     }
-
-                    Button("Add") {
-                        viewModel.addPlan(title: "New Workout Plan")
+                    .onDelete(perform: deletePlan)
+                }
+                .listStyle(.plain)
+                
+                // New plan
+                HStack {
+                    TextField("New Plan Title", text: $newTitle)
+                        .textFieldStyle(.roundedBorder)
+                    
+                    Button {
+                        addWorkoutPlan()
+                    } label: {
+                        Image(systemName: "plus")
                     }
+                    .disabled(newTitle.isEmpty)
                 }
+                .padding()
             }
-            .onAppear {
-                if viewModel == nil {
-                    viewModel = WorkoutViewModel(context: context)
-                }
-                Task {
-                    await viewModel.fetchPlans()
-                }
-            }
+            .navigationTitle("Workout Plans")
         }
+        .preferredColorScheme(.dark)
+        .tint(.orange)
     }
+
 }
-
-
-
-    
-
 
 #Preview {
     DayView()
+        .modelContainer(for: [WorkoutPlan.self, WorkoutExercise.self])
 }
+

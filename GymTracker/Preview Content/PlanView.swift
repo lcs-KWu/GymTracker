@@ -18,7 +18,7 @@ struct ExerciseListView: View {
     @State private var newExerciseReps = ""
     @State private var newExerciseSets = ""
 
-    // MARK: View
+    // MARK: Computed proerties 
     var body: some View {
         VStack(spacing: 0) {
 
@@ -123,4 +123,20 @@ struct ExerciseListView: View {
             context.delete(exercise)
         }
     }
+}
+
+
+#Preview {
+    let container = try! ModelContainer(for: WorkoutPlan.self, WorkoutExercise.self)
+    let context = container.mainContext
+
+    let samplePlan = WorkoutPlan(title: "Leg Day")
+    samplePlan.exercises.append(WorkoutExercise(name: "Squat", reps: 10, sets: 4))
+    samplePlan.exercises.append(WorkoutExercise(name: "Lunges", reps: 12, sets: 3))
+    context.insert(samplePlan)
+
+    return NavigationStack {
+        ExerciseListView(plan: samplePlan)
+    }
+    .modelContainer(container)
 }
